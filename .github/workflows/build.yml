@@ -23,16 +23,19 @@ jobs:
         with:
           gradle-version: '8.10.2'
 
-      - name: Extract project ZIP
-        run: unzip -o AdBlockVN-v2-GitHub.zip
+      - name: Extract AdBlock VN project
+        run: |
+          unzip -q AdBlockVN-v2-GitHub.zip -d project
+          test -f project/AdBlockVN/settings.gradle.kts
+          test -f project/AdBlockVN/app/build.gradle.kts
 
       - name: Build debug APK
-        working-directory: AdBlockVN
+        working-directory: project/AdBlockVN
         run: gradle --no-daemon assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: AdBlockVN-debug-apk
-          path: AdBlockVN/app/build/outputs/apk/debug/app-debug.apk
+          path: project/AdBlockVN/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
